@@ -85,7 +85,7 @@ ReactDOM.render(
 
 #### Setup Cart Slice
 
-- application feature
+- application feature  e.g Modals and Cart add up
 - create features folder/cart
 - create cartSlice.js
 
