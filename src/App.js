@@ -19,7 +19,7 @@ const App = () => {
   }, [cartItems] )
 
   useEffect(() => {
-      dispatch(getCartItems())
+      dispatch(getCartItems('random'))
   }, []);
 
 
