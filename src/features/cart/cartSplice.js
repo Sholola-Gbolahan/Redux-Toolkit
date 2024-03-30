@@ -1,18 +1,28 @@
-import { createSlice } from "@reduxjs/toolkit"
-import cartItems
- from "../../cartItems"
+import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
+// import cartItems from "../../cartItems"
+
+ const url ='https://course-api.com/react-useReducer-cart-project';
+
  
 const initialState = {
-    cartItems:cartItems,
+    cartItems: [],
     amount:2,
     total:0,
     isLoading:true
 
-}
+};
+
+export const getCartItems = createAsyncThunk('cart/getCartItems', () => {
+    return fetch(url)
+    .then((resp) => resp.json())
+    .catch((err) => console.log(err))
+})
 
 const cartSplice = createSlice({
+
     name: 'cart',
     initialState,
+
     reducers: {
         clearCart:(state) => {
             state.cartItems = [];
@@ -46,11 +56,30 @@ const cartSplice = createSlice({
             state.total = total;
             state.amount = amount
         }
+    },
+
+    //  The Three Life Cycle Items are 
+    // Pending, Fulfiled, rejected
+    extraReducers: {
+        [getCartItems.pending]:(state) => {
+            state.isLoading = true
+        },
+
+        [getCartItems.fulfilled]:(state,action) => {
+            console.log(action.payload)
+            state.isLoading = false;
+            state.cartItems = action.payload 
+        },
+
+        // Rejected is only for the network
+        [getCartItems.rejected]:(state) => {
+            state.isLoading = false
+        }
     }
 
 })
 
-console.log(cartSplice)
+// console.log(cartSplice)
 
 
 export const { clearCart, removeItem,increase,decrease, calculateTotals} = cartSplice.actions
