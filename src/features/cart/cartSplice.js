@@ -17,10 +17,10 @@ export const getCartItems = createAsyncThunk(
   async (name, thunkAPI) => {
     try {
       // console.log(name)
-    //   console.log(thunkAPI);
-    //   console.log(thunkAPI.getState());
-    //   thunkAPI.dispatch(openModal());
-    
+      //   console.log(thunkAPI);
+      //   console.log(thunkAPI.getState());
+      //   thunkAPI.dispatch(openModal());
+
       const resp = await axios(url);
       //This will  return value if successfull
       return resp.data;
@@ -67,22 +67,25 @@ const cartSplice = createSlice({
 
   //  The Three Life Cycle Items are
   // Pending, Fulfiled, rejected
-  extraReducers: {
-    [getCartItems.pending]: (state) => {
-      state.isLoading = true;
-    },
 
-    [getCartItems.fulfilled]: (state, action) => {
-      // console.log(action)
-      state.isLoading = false;
-      state.cartItems = action.payload;
-    },
-
-    // Rejected is only for the network
-    [getCartItems.rejected]: (state, action) => {
-      console.log(action);
-      state.isLoading = false;
-    },
+  //   Using builder callback Notation
+  extraReducers: (builder) => {
+    // Pending Action
+    builder
+      .addCase(getCartItems.pending, (state) => {
+        state.isLoading = true;
+      })
+      //  Fullfilled Action
+      .addCase(getCartItems.fulfilled, (state, action) => {
+        // console.log(action)
+        state.isLoading = false;
+        state.cartItems = action.payload;
+      })
+      // Rejected Action
+      .addCase(getCartItems.rejected, (state, action) => {
+        console.log(action);
+        state.isLoading = false;
+      });
   },
 });
 
